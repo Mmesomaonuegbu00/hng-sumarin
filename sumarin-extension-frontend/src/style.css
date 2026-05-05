@@ -1,0 +1,113 @@
+@import "tailwindcss";
+@source "../src/**/*.js";
+
+@theme {
+  /* Custom Fonts */
+  --font-sans: "DM Sans", ui-sans-serif, system-ui;
+  --font-display: "Syne", sans-serif;
+  --font-mono: "DM Mono", monospace;
+
+  /* DARK MODE THEME COLORS */
+  --color-paper: #0c0901;      /* Deep Black */
+  --color-paper-dim: #1a1a1c;  /* Dark Gray for cards/sections */
+  --color-ink: #f5f2eb;        /* Off-white for readability */
+  --color-accent: #e8855f;     /* Slightly brighter for dark mode */
+  --color-accent-dim: #c8401a;
+  --color-muted: #8a8170;
+  --color-border: #2a2a2c;     /* Light gray/charcoal border */
+}
+
+@layer base {
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    width: 480px;
+    min-height: 640px;
+    font-size: 13px;
+    overflow-x: hidden;
+    position: relative;
+    margin: 0;
+  }
+
+  /* Grainy Film Texture - Reduced opacity for dark mode */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.25; 
+  }
+}
+
+@layer components {
+  .view {
+    display: none;
+  }
+  
+  .view.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    border-bottom: 2px solid transparent;
+    transition: all 150ms ease;
+  }
+
+  .tab-btn.active-tab {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+
+  .skel {
+    animation: skel-pulse 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes skel-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.9; }
+}
+
+/* Scrollbar Styling */
+#summary-output::-webkit-scrollbar,
+#history-list::-webkit-scrollbar {
+  width: 3px;
+}
+
+#summary-output::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 99px;
+}
+/* Container for the scrollable summary area */
+#summary-output {
+  padding-bottom: 20px;
+}
+
+/* Subtle headers for Insights and Takeaways */
+.text-muted {
+  color: #888;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Make the summary cards feel more modern */
+.bg-white {
+  transition: transform 0.2s ease;
+}
+
+.bg-white:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+/* High-quality scrollbar for a clean look */
+#tab-summary::-webkit-scrollbar {
+  width: 4px;
+}
+#tab-summary::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 10px;
+}

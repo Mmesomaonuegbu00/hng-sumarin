@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sumarin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<body class="bg-paper text-ink font-sans text-[13px] w-95 min-h-140 overflow-x-hidden">
+
+  <header class="flex items-center justify-between px-4 py-3 border-b border-border bg-paper sticky top-0 z-10">
+    <div class="flex items-center gap-2">
+      <div
+        class="w-7 h-7 bg-accent rounded-md flex items-center justify-center font-display font-black text-white text-sm -rotate-2 shadow shadow-accent/30"
+        aria-hidden="true">S</div>
+      <span class="font-display font-bold text-[15px] tracking-tight text-ink">Sumarin</span>
+    </div>
+    <button id="reset-btn" aria-label="Start over"
+      class="hidden font-mono text-[10px] text-muted border border-border rounded px-2.5 py-1 hover:border-accent hover:text-accent transition-all duration-150 cursor-pointer">
+      ↩ reset
+    </button>
+  </header>
+
+  <div id="initial-view" class="view active px-4 py-5 gap-4" role="main">
+
+    <div class="relative bg-paper-dim border border-border rounded-xl p-4 overflow-hidden">
+      <div
+        class="absolute right-3 bottom-2 font-mono text-[36px] text-border leading-none select-none pointer-events-none"
+        aria-hidden="true">//</div>
+      <p class="font-mono text-[9px] uppercase tracking-[0.18em] text-accent mb-1.5">Ready</p>
+      <p class="font-display font-semibold text-[15px] text-ink leading-snug max-w-50">
+        Summarize this page into its core essence.
+      </p>
+    </div>
+
+    <div class="flex gap-2 flex-wrap" aria-label="Features">
+      <span class="font-mono text-[9px] bg-white border border-border rounded-full px-2.5 py-1 text-muted">⚡ Key
+        takeaways</span>
+      <span class="font-mono text-[9px] bg-white border border-border rounded-full px-2.5 py-1 text-muted">🖊 Highlight
+        mode</span>
+      <span class="font-mono text-[9px] bg-white border border-border rounded-full px-2.5 py-1 text-muted">🕓
+        History</span>
+    </div>
+
+    <!-- BUTTON ROW -->
+    <div class="flex gap-2 w-full">
+      <button id="summarize-btn" aria-label="Summarize this page"
+        class="relative flex-2 bg-accent text-white font-display font-bold text-[13px] rounded-xl py-3.5 flex items-center justify-center gap-2 overflow-hidden hover:bg-[#b03515] active:scale-[0.98] transition-all duration-150 shadow-md shadow-accent/20 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+        <span class="absolute inset-0 bg-linear-to-br from-white/10 to-transparent pointer-events-none"></span>
+        <svg class="w-4 h-4 opacity-90" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M2 4h12M2 8h8M2 12h5" stroke-linecap="round" />
+        </svg>
+        Summarize
+      </button>
+
+      <button id="quick-highlight-btn" aria-label="Quick highlight"
+        class="flex-1 bg-orange-500 border border-orange-500 text-white font-display font-bold text-[13px] rounded-xl py-3.5 flex items-center justify-center gap-2 hover:bg-orange-600 hover:border-orange-600 transition-all duration-150 cursor-pointer">
+        🖊 Highlight
+      </button>
+    </div>
+  </div>
+
+  <div id="loading-view" class="view px-4 py-8 gap-5 items-center" role="status" aria-live="polite"
+    aria-label="Loading summary">
+    <div class="w-full flex flex-col gap-2.5" aria-hidden="true">
+      <div class="skel h-2.5 bg-border rounded-full w-4/5"></div>
+      <div class="skel h-2.5 bg-border rounded-full w-2/3"></div>
+      <div class="skel h-2.5 bg-border rounded-full w-3/4"></div>
+      <div class="skel h-2.5 bg-border rounded-full w-1/2"></div>
+    </div>
+    <p class="font-mono text-[10px] uppercase tracking-[0.12em] text-accent"
+      style="animation:skel 1.5s ease-in-out infinite">
+      summarizing
+    </p>
+  </div>
+
+  <div id="error-view" class="view px-4 py-12 items-center text-center gap-2.5" role="alert">
+    <span class="text-3xl" aria-hidden="true">⚠</span>
+    <p class="font-display font-semibold text-[13px] text-red-700">Failed to summarize page</p>
+    <p class="font-mono text-[10px] text-muted max-w-55 leading-relaxed">
+      This may be an internal browser page or the API may be unavailable.
+    </p>
+    <button id="retry-btn"
+      class="font-mono text-[10px] border border-border rounded px-3 py-1.5 text-muted hover:border-accent hover:text-accent transition-all mt-1 cursor-pointer">
+      Try again
+    </button>
+  </div>
+
+  <div id="result-view" class="view" role="main">
+
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-border bg-paper-dim">
+      <div id="score-badge" role="img" aria-label="Content quality score"
+        class="w-9 h-9 rounded-lg flex items-center justify-center font-display font-black text-sm text-white shrink-0">
+      </div>
+      <div class="flex-1 min-w-0">
+        <span id="page-title-label"
+          class="font-display font-semibold text-[12px] text-ink block truncate mb-0.5"></span>
+        <div class="flex items-center gap-2">
+          <span id="reading-time-label" class="font-mono text-[9px] text-orange-500"></span>
+          <span id="word-count-label" class="font-mono text-[9px] text-white"></span>
+          <span id="domain-label" class="font-mono text-[9px] text-shadow-accent"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex border-b border-border bg-paper px-4 gap-5 items-center" role="tablist"
+      aria-label="Summary sections">
+      <button data-tab="summary" role="tab" aria-selected="true" aria-controls="tab-summary"
+        class="tab-btn active-tab font-mono text-[9px] uppercase tracking-[0.15em] py-2.5 text-muted transition-all cursor-pointer">Summary</button>
+
+      <button data-tab="history" role="tab" aria-selected="false" aria-controls="tab-history"
+        class="tab-btn font-mono text-[9px] uppercase tracking-[0.15em] py-2.5 text-muted transition-all cursor-pointer">History</button>
+      <div class="ml-auto">
+        <button id="copy-btn" aria-label="Copy all takeaways to clipboard"
+          class="font-mono text-[9px] border border-border rounded px-2 py-1 text-muted hover:border-accent hover:text-accent transition-all cursor-pointer">
+          Copy
+        </button>
+      </div>
+    </div>
+
+    <div id="tab-summary" class="tab-panel active-panel relative" role="tabpanel" aria-label="Key takeaways">
+      <div id="summary-output" class="px-4 pt-3 pb-6 max-h-72.5 overflow-y-auto flex flex-col gap-2"></div>
+      <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-linear-to-t from-paper to-transparent">
+      </div>
+    </div>
+
+
+
+    <div id="tab-history" class="tab-panel flex-col px-4 py-3 gap-2" role="tabpanel" aria-label="Recent summaries">
+      <div id="history-list" class="flex flex-col gap-1.5 max-h-72.5 overflow-y-auto"></div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
