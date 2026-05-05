@@ -3,7 +3,9 @@
   "name": "Sumarin",
   "version": "1.0",
   "permissions": ["activeTab", "scripting", "storage", "tabs"],
-  "host_permissions": ["http://localhost:3000/*"],
+  "host_permissions": [
+    "https://hng-sumarin.vercel.app/*"
+  ],
   "background": {
     "service_worker": "assets/background.js"
   },
@@ -16,6 +18,4 @@
       "js": ["assets/content.js"]
     }
   ]
-
-  
 }
