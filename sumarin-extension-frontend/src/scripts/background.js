@@ -1,4 +1,4 @@
-const API_URL = "https://sumarin-backend.vercel.app/api/summarize";
+const API_URL = "https://hng-sumarin.vercel.app/api/summarize";
 
 console.log("🔥 Sumarin background loaded");
 
